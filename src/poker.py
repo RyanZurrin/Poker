@@ -8,10 +8,7 @@ def deal(num_hands, n=5, deck=None):
     if deck is None:
         deck = my_deck
     random.shuffle(deck)
-    hands = []
-    for i in range(num_hands):
-        hands.append(deck[i * n:(i + 1) * n])
-    return hands
+    return [deck[i * n:(i + 1) * n] for i in range(num_hands)]
 
 
 def poker(hands):
@@ -39,10 +36,7 @@ def flush(hand):
 
 def kind(n, ranks):
     """Return the first rank that this hand has param cards of"""
-    for r in ranks:
-        if ranks.count(r) == n:
-            return r
-    return None
+    return next((r for r in ranks if ranks.count(r) == n), None)
 
 
 def two_pair(ranks):
@@ -50,10 +44,7 @@ def two_pair(ranks):
     else None. """
     pair = kind(2, ranks)
     low_pair = kind(2, list(reversed(ranks)))
-    if pair and low_pair != pair:
-        return pair, low_pair
-    else:
-        return None
+    return (pair, low_pair) if pair and low_pair != pair else None
 
 
 def hand_rank(hand):
@@ -84,10 +75,7 @@ def allmax(iterable, key=None):
     result = []
     max_val = None
     for x in iterable:
-        if key is None:
-            val = x
-        else:
-            val = key(x)
+        val = x if key is None else key(x)
         if max_val is None or val > max_val:
             result = [x]
             max_val = val
